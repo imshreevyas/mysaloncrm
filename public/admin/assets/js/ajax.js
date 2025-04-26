@@ -1,12 +1,11 @@
 $(document).on("click", ".metismenu li a, .navbar-nav  li a", function(e) {
 	e.preventDefault();
-
 	var page = $(this).attr("href");
 	
 	if ($(this).attr("target") == "_self") {window.location.href= page; return true};
 	if ($(this).attr("target") == "_blank") window.open(page, "_blank");
 
-	 if (page == "javascript: void(0);") return false;
+	if (page == "javascript: void(0);") return false;
 
 	window.location.hash = page;
 
@@ -40,42 +39,5 @@ $(document).on("click", ".metismenu li a, .navbar-nav  li a", function(e) {
 		}
 	});
 
-	 if (page == "javascript: void(0);") return false;
-	call_ajax_page(page);
-});
-
-function call_ajax_page(page) {
-
-	if(page === "index.html")
-	{
-		document.title = "Dashboard | Nazox - Admin & Dashboard Template";
-	}
-	else
-	{
-		var title = page.replace(".html", "");
-		var title1 = title.replace("-", " ");
-		document.title = title1.charAt(0).toUpperCase() + title1.slice(1) + " | Nazox - Admin & Dashboard Template";
-	}
-
-	$.ajax({
-		url: "ajax/" + page,
-		cache: false,
-		dataType: "html",
-		type: "GET",
-		success: function(data) {
-			$("#result").empty();
-			$("#result").html(data);
-			window.location.hash = page;
-			$(window).scrollTop(0);
-		}
-	});
-}
-
-$(document).ready(function() {
-	 var path = window.location.hash.substr(1);
-	if (path == "index.html") {
-		call_ajax_page("index.html");
-	} else {
-		call_ajax_page("index.html");
-	}
+	if (page == "javascript: void(0);") return false;
 });

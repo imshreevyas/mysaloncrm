@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -12,7 +17,36 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.auth.login');
+    }
+
+    public function adminLoginPost(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        // validation false send error in array
+
+        $credentials = request(['username', 'password']);
+        if(!Auth::guard('admin')->attempt($credentials))
+        return redirect()->route('admin.login')->withErrors('Invalid Credentials!');
+
+        // Check if the admin is authenticated
+        $admin = Auth::guard('admin')->user();
+        if (!$admin) {
+            return redirect()->route('admin.login')->withErrors('Authentication Failed!');
+        }
+
+        $request->session()->regenerate();
+        session(['user_type' => 'admin']);
+        return redirect()->route('admin.dashboard')->withSuccess('message', 'Login Successfully!');
+
+    }
+
+    public function dashboard(){
+        return view('admin.home.dashboard');
     }
 
     /**
@@ -61,5 +95,15 @@ class AdminController extends Controller
     public function destroy(Admin $admin)
     {
         //
+    }
+
+    public function logout(){
+        Auth::logout();
+        Session::flush();
+        return Redirect::to('/admin');
+    }
+
+    public function generatePassword($newPass = 'Admin@123'){
+        return Hash::make($newPass);
     }
 }

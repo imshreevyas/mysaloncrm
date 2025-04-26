@@ -196,8 +196,8 @@ File: Main Js File
             $("html").removeAttr("dir");
             $("#dark-mode-switch").prop("checked", false);
             $("#rtl-mode-switch").prop("checked", false);
-            $("#bootstrap-style").attr('href','assets/css/bootstrap.min.css');
-            $("#app-style").attr('href','assets/css/app.min.css');
+            $("#bootstrap-style").attr('href',`${APP_URL}/public/admin/assets/css/bootstrap.min.css`);
+            $("#app-style").attr('href',`${APP_URL}/public/admin/assets/css/app.min.css`);
             document.body.setAttribute('data-bs-theme', 'light');
             sessionStorage.setItem("is_visited", "light-mode-switch");
         } else if($("#dark-mode-switch").prop("checked") == true && id === "dark-mode-switch"){
@@ -209,8 +209,8 @@ File: Main Js File
         } else if($("#rtl-mode-switch").prop("checked") == true && id === "rtl-mode-switch"){
             $("#light-mode-switch").prop("checked", false);
             $("#dark-mode-switch").prop("checked", false);
-            $("#bootstrap-style").attr('href','assets/css/bootstrap-rtl.min.css');
-            $("#app-style").attr('href','assets/css/app-rtl.min.css');
+            $("#bootstrap-style").attr('href',`${APP_URL}/public/admin/assets/css/bootstrap-rtl.min.css`);
+            $("#app-style").attr('href',`${APP_URL}/public/admin/assets/css/app-rtl.min.css`);
             $("html").attr("dir", 'rtl');
             document.body.setAttribute('data-bs-theme', 'light');
             sessionStorage.setItem("is_visited", "rtl-mode-switch");

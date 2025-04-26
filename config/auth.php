@@ -43,6 +43,10 @@ return [
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
+        ],
+        'salon' => [
+            'driver' => 'session',
+            'provider' => 'salons',
         ]
     ],
 
@@ -70,7 +74,11 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'table' => App\Models\Admin::class,
+            'model' => App\Models\Admin::class,
+        ],
+        'salons' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Salon::class,
         ],
     ],
 
