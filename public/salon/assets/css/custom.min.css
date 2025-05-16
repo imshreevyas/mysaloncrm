@@ -1,0 +1,48 @@
+
+/*# sourceMappingURL=custom.min.css.map */
+:root{
+    --brand-text-primary:#0F52BA;
+    --brand-text-primary-2:#F2BDCD;
+    --brand-text-primary-3:#4CBB17;
+    --brand-text-seconday:#8B008B;
+    --brand-text-seconday-2:#F56FA1;
+}
+
+.text-brand-secondary{
+    color: var(--brand-text-seconday);
+}
+
+.text-primary-3{
+    color: var(--brand-text-primary-3);
+}
+
+.color-primary-3{
+    background-color: var(--brand-text-primary-3) !important;
+}
+
+.custom-blur{
+    filter:blur(2px) !important;
+}
+
+.profile-foreground .profile-wid-bg::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: .5;
+    background:var(--brand-text-seconday);
+    background:-webkit-gradient(linear,left bottom,left top,from(var(--brand-text-primary)),to(var(--brand-text-seconday)));
+    background:linear-gradient(to top,var(--brand-text-primary),var(--brand-text-seconday))
+}
+
+.fs-rs-14{
+    font-size: 14px !important;
+} 
+
+@media screen and (max-width: 767px) {
+    .fs-rs-14{
+        font-size: 20px !important;
+    } 
+}

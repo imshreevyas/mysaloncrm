@@ -1,19 +1,17 @@
 @if (session('success'))
-    <div class="alert alert-success alert-correct fade show" role="alert">
-        <i class="mdi mdi-block-helper me-2"></i>
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"
-            aria-label="Close"></button>
-    </div>
+    <script>
+        $(document).ready(function() {
+            show_toast('success', '{{ session('success') }}')
+        });
+    </script>
 @endif
 
 @if ($errors->any())
-    @foreach ($errors->all() as $error)
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="mdi mdi-block-helper me-2"></i>
-            {{ $error }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                aria-label="Close"></button>
-        </div>
-    @endforeach
+    <script>
+        @foreach ($errors->all() as $error)
+            $(document).ready(function() {
+                show_toast('error', '{{ $error }}')
+            });
+        @endforeach
+    </script>
 @endif

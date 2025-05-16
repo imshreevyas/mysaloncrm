@@ -14,7 +14,6 @@ class Salon extends Model implements Authenticatable
 
     protected $fillable = [
         'salon_uid',
-        'salon_name',
         'password',
         'owner_name',
         'mobile',

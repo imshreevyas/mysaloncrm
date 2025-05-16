@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-layout="vertical" data-topbar="dark" data-sidebar-size="lg" data-sidebar="light"
+    data-sidebar-image="none" data-preloader="disable">
 
 <head>
 @include('salon.includes.head')
 </head>
 
-<body data-sidebar="dark">
+<body>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -17,43 +18,43 @@
         <!-- Left Sidebar End -->
 
         <div class="main-content">
+            
             @yield('content')
+        
+            @include('salon.includes.footer')
+
+            <!-- end main content-->
         </div>
-
-        <!-- end main content-->
-
-        @include('salon.includes.footer')
 
     </div>
     
+    <!--start back-to-top-->
+    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+    <!--end back-to-top-->
+    
+    <!--preloader-->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="customizer-setting d-none d-md-block">
+        <div class="btn-info rounded-pill shadow-lg btn btn-icon btn-lg p-2" data-bs-toggle="offcanvas"
+            data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
+            <i class='mdi mdi-spin mdi-cog-outline fs-22'></i>
+        </div>
+    </div>
+
+
     @include('salon.includes.right-sidebar')
 
 
     @include('salon.includes.footer-links')
-
-    <!-- Updated Password Popup -->
-    <div class="modal fade" id="update_password" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form class="" action="{{ route('salon.update_password') }}" method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Add New Password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        @include('salon.auth.update-password')
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light btn-md waves-effect" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-md waves-effect waves-light">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Updated Password Popup -->
-
 </body>
 
 </html>

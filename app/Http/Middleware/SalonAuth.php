@@ -20,6 +20,6 @@ class SalonAuth
             return $next($request);
         }
 
-        return redirect('/salon/login')->withErrors(['Unauthorized access.']);
+        return redirect('/salon/login')->withErrors(['Session Expired! please login again.']);
     }
 }

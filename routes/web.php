@@ -72,7 +72,14 @@ Route::prefix('salon')->name('salon.')->group(function(){
     Route::post('/submit_register',[SalonController::class, 'submit_register'])->name('submit_register');
     
     Route::middleware(['salon.auth'])->group(function () {
+
+        // Salon Profile Routes
         Route::get('/profile',[SalonProfileController::class, 'index'])->name('profile');
+        Route::get('/edit-profile',[SalonProfileController::class, 'edit'])->name('edit-profile');
+        Route::post('/update-salon-banner',[SalonProfileController::class, 'update_salon_banner'])->name('update-salon-banner');
+        Route::post('/update-salon-social-media',[SalonProfileController::class, 'update_salon_social_media'])->name('update-salon-social-media');
+
+        // Salon Basic Routes
         Route::get('/logout',[SalonController::class, 'logout'])->name('logout');
         
         // POST Requests

@@ -14,9 +14,15 @@ return new class extends Migration
         Schema::create('salon_profiles', function (Blueprint $table) {
             $table->id();
             $table->string('salon_uid');
+            $table->string('salon_name')->nullable();
             $table->string('salon_logo')->nullable();
-            $table->integer('salon_type')->default(0)->comment('0:unisex,1:male,2:female');
-            $table->string('full_address');
+            $table->string('salon_banner')->nullable();
+            $table->longText('about_us')->nullable();
+            $table->string('salon_type')->default('unisex')->comment('unisex,male,female');
+            $table->text('full_address')->nullable();
+            $table->string('state')->nullable();
+            $table->string('city')->nullable();
+            $table->string('pincode')->nullable();
             $table->string('contact_number');
             $table->string('business_email')->nullable();
             $table->integer('staff_count')->default(0);

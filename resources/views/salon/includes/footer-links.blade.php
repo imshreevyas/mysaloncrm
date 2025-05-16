@@ -1,41 +1,36 @@
 <!-- JAVASCRIPT -->
-<script src="{{ asset('admin/assets/libs/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/metismenu/metisMenu.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/node-waves/waves.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-<!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyCtSAR45TFgZjOs4nBFFZnII-6mMHLfSYI"></script> -->
+<script src="{{ asset('salon/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('salon/assets/libs/simplebar/simplebar.min.js') }}"></script>
+<script src="{{ asset('salon/assets/libs/node-waves/waves.min.js') }}"></script>
+<script src="{{ asset('salon/assets/libs/feather-icons/feather.min.js') }}"></script>
+<script src="{{ asset('salon/assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+<script src="{{ asset('salon/assets/libs/choices/choices.js') }}"></script>
+<script src="{{ asset('salon/assets/libs/flatpickr/flatpickr.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-<script src="{{ asset('admin/assets/js/app.js') }}"></script>
-<script src="{{ asset('admin/assets/js/ajax.js') }}"></script>
-<script src="{{ asset('admin/assets/js/common.js') }}"></script>
+<!-- apexcharts -->
+<script src="{{ asset('salon/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
-<!-- Required datatable js -->
-<script src="{{ asset('admin/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<!-- Buttons examples -->
-<script src="{{ asset('admin/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/jszip/jszip.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/pdfmake/build/pdfmake.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/pdfmake/build/vfs_fonts.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
+<!-- Vector map-->
+<script src="{{ asset('salon/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
+<script src="{{ asset('salon/assets/libs/jsvectormap/maps/world-merc.js') }}"></script>
 
-<script src="{{ asset('admin/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-select/js/dataTables.select.min.js') }}"></script>
+<!--Swiper slider js-->
+<script src="{{ asset('salon/assets/libs/swiper/swiper-bundle.min.js') }}"></script>
 
-<!-- Responsive examples -->
-<script src="{{ asset('admin/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('admin/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+<!-- Dashboard init -->
+<script src="{{ asset('salon/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
 
-<!-- Datatable init js -->
-<script src="{{ asset('admin/assets/js/pages/datatables.init.js') }}"></script>
+<!-- notifications init -->
+<script src="{{ asset('salon/assets/js/pages/notifications.init.js') }}"></script>
+
+<!-- App js -->
+<script src="{{ asset('salon/assets/js/app.js') }}"></script>
 
 
-<!-- bs custom file input plugin -->
-<script src="{{ asset('admin/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<script src="{{ asset('admin/assets/js/pages/form-element.init.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script src="{{ asset('salon/assets/js/common.js') }}"></script>
+@include('display_errors')

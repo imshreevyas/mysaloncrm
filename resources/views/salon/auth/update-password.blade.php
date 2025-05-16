@@ -1,6 +1,5 @@
 
 @csrf
-@include('display_errors')
 <div class="auth-form-group-custom mb-4">
     <i class="ri-eye-close-fill auti-custom-input-icon" onclick="showpassword(this)"></i>
     <label for="userpassword">Password</label>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Salon;
+use App\Models\SalonProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
@@ -42,12 +43,6 @@ class SalonController extends Controller
 
             $salon = Auth::guard('salon')->user();
 
-            // if (Auth::guard('salon')->check()) {
-            //     dd(Auth::guard('salon')->user()); // Check user immediately after login
-            // } else {
-            //     dd("Auth guard check failed");
-            // }
-
             // Check salon status
             if ($salon->status == -1) {
                 return redirect()->route('salon.login')->withErrors([
@@ -60,7 +55,6 @@ class SalonController extends Controller
                     'email' => errorMessage('UNVERIFIED_SALON_EMAIL')
                 ]);
             }
-
             
             // Redirect based on profile update status
             if ($salon->updated_profile == 0) {
@@ -184,10 +178,11 @@ class SalonController extends Controller
             
         } else {
             // Otherwise, create a new user and log them in
+            $salon_uid = Str::uuid()->toString();
             $newUser = Salon::updateOrCreate([
                 'email' => $user->email
             ], [
-                'salon_uid' => Str::uuid()->toString(),
+                'salon_uid' => $salon_uid,
                 'owner_name' => $user->name,
                 'email' => $user->email,
                 'is_salon_email_verified' => 1,
@@ -198,6 +193,15 @@ class SalonController extends Controller
                 'email_verified_at' => now()
             ]);
             Auth::guard('salon')->login($newUser);
+
+            // Create Salon Profile also on register
+            SalonProfile::create([
+                'salon_uid' => $salon_uid,
+                'salon_name' => '',
+                'contact_number' => '+91',
+                'business_email' => $user->email
+            ]);
+
             return redirect('salon/profile');
         }
     }
@@ -213,19 +217,31 @@ class SalonController extends Controller
 
         // Send OTP on email after Insert to verify email id
 
-        $other_data = array(
-            'salon_uid' => Str::uuid()->toString(),
+        $salon_uid = Str::uuid()->toString();
+        $salon_insert_data = array(
+            'owner_name' => $validatedData['owner_name'],
+            'email' => $validatedData['email'],
+            'mobile' => $validatedData['mobile'],
+            'salon_uid' => $salon_uid,
             'updated_profile' => 0,
             'status' => 0
         );
 
-        $validatedData['password'] = Hash::make($validatedData['password']);
+        $salon_insert_data['password'] = Hash::make($validatedData['password']);
 
-        $validatedData = array_merge($validatedData, $other_data);
-        $create_new_salon = Salon::create($validatedData);
+        $create_new_salon = Salon::create($salon_insert_data);
 
         if($create_new_salon){
             Auth::guard('salon')->login($create_new_salon);
+
+            // Create Salon Profile also on register
+            SalonProfile::create([
+                'salon_uid' => $salon_uid,
+                'salon_name' => $validatedData['salon_name'],
+                'contact_number' => $validatedData['mobile'],
+                'business_email' => $user->email
+            ]);
+
             return redirect()->route('salon.profile')->with('success', 'Welcome, Registered Successfully!');
         }else{
             return redirect()->back()->withErrors('Something went wrong, try again later!');
