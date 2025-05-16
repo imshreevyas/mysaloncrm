@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="dark" data-sidebar-size="lg" data-sidebar="light"
+<html lang="en" data-layout="vertical" data-topbar="dark" data-sidebar-size="sm-hover" data-sidebar="light" data-layout-width="fluid"
     data-sidebar-image="none" data-preloader="disable">
 
 <head>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="customizer-setting d-none d-md-block">
-        <div class="btn-info rounded-pill shadow-lg btn btn-icon btn-lg p-2" data-bs-toggle="offcanvas"
+        <div class="btn-info rounded-pill shadow-lg btn btn-icon btn-lg p-2" data-bs-toggle="offcanvass"
             data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
             <i class='mdi mdi-spin mdi-cog-outline fs-22'></i>
         </div>

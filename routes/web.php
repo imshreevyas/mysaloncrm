@@ -73,6 +73,7 @@ Route::prefix('salon')->name('salon.')->group(function(){
     
     Route::middleware(['salon.auth'])->group(function () {
 
+        Route::get('/dashboard',[SalonController::class, 'salonDashboard'])->name('dashboard');
         // Salon Profile Routes
         Route::get('/profile',[SalonProfileController::class, 'index'])->name('profile');
         Route::get('/edit-profile',[SalonProfileController::class, 'edit'])->name('edit-profile');

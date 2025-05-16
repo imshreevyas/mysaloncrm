@@ -18,6 +18,8 @@ class SalonController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $data;
+    private $salon_uid;
     public function index(Request $request)
     {
         return view('salon.auth.login');
@@ -56,13 +58,9 @@ class SalonController extends Controller
                 ]);
             }
             
-            // Redirect based on profile update status
-            if ($salon->updated_profile == 0) {
-                session(['user_type' => 'Salon']);
-                return redirect()->route('salon.profile')->with('success', 'Welcome, let update your profile!');
-            } else {
-                return redirect('salon.dashboard');
-            }
+            session(['user_type' => 'Salon']);
+            return redirect()->route('salon.dashboard');
+               
         } else {
             // Authentication failed
             return redirect()->route('salon.login')->withErrors([
@@ -149,11 +147,7 @@ class SalonController extends Controller
             $existingSalon->update($updatedData);
         }
 
-        // if profile is not updated redirect to update profile page
-        if($existingSalon->updated_profile == 0)
-            return redirect('salon/profile');
-        else
-            return redirect('salon/dashboard');
+        return redirect()->route('salon.dashboard');
     }
 
     public function google_callback(){
@@ -255,4 +249,11 @@ class SalonController extends Controller
         return Redirect::to(route('salon.login'));
     }
 
+    public function salonDashboard(){
+
+        // Get Whole Salon Data
+        $this->salon_uid = Auth::guard('salon')->user()->salon_uid;
+        $this->data['salon_details'] = Salon::where('salon_uid',$this->salon_uid)->with('profile')->first();
+        return view('salon.home.dashboard', $this->data);
+    }
 }
