@@ -67,18 +67,20 @@
                                 </div>
                             </div>
                             @if (!empty($salon_details->profile->social_media_links))
-                                @foreach ($salon_details->profile->social_media_links as $social_media_link)
+                            @php
+                                $all_links = json_decode($salon_details->profile->social_media_links, true);
+                            @endphp
+                                @foreach ($all_links as $index => $single_sc)
                                     <div class="mb-3 d-flex">
                                         <div class="avatar-xs d-block flex-shrink-0 me-3">
                                             <span class="avatar-title rounded-circle fs-16 bg-dark text-light">
-                                                <i class="ri-github-fill"></i>
+                                                <i class="ri-{{ $single_sc['type'] }}-fill"></i>
                                             </span>
                                         </div>
                                         <input type="email" class="form-control" id="gitUsername" placeholder="Username"
-                                            value="@daveadame">
+                                            value="{{ $single_sc['username'] }}">
                                     </div>
                                 @endforeach
-                            @else
                                 <form class="form-group" id="social_media_links_form">
                                     @csrf
                                         {{-- Dynamic Add Form --}}

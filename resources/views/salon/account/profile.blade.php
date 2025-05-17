@@ -4,6 +4,7 @@
 
 <div class="page-content">
     <div class="container-fluid">
+
         <div class="profile-foreground position-relative mx-n4 mt-n4">
             <div class="profile-wid-bg custom-blur">
                 <img src="{{ isset($salon_details->profile->salon_banner) ? asset($salon_details->profile->salon_banner) : asset('msg/default-profile-bg.png') }}" alt="" class="profile-wid-img" />
@@ -50,7 +51,6 @@
             </div>
             <!--end row-->
         </div>
-
         <div class="row">
             <div class="col-lg-12">
                 <div>
@@ -2330,7 +2330,6 @@
             </div>
             <!--end col-->
         </div>
-        <!--end row-->
 
     </div><!-- container-fluid -->
 </div><!-- End Page-content -->

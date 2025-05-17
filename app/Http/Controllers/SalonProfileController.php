@@ -59,7 +59,6 @@ class SalonProfileController extends Controller
      */
     public function edit(SalonProfile $salonProfile)
     {
-        //
         return view('salon.account.editProfile', $this->data);
     }
 
