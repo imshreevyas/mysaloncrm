@@ -77,15 +77,20 @@ Route::prefix('salon')->name('salon.')->group(function(){
         // Salon Profile Routes
         Route::get('/profile',[SalonProfileController::class, 'index'])->name('profile');
         Route::get('/edit-profile',[SalonProfileController::class, 'edit'])->name('edit-profile');
+        Route::post('/get-cities',[SalonProfileController::class, 'get_cities'])->name('get-cities');
+        Route::post('/get-pincodes',[SalonProfileController::class, 'get_pincodes'])->name('get-pincodes');
+        Route::post('/update-password',[SalonProfileController::class, 'update_password'])->name('update-password');
+        Route::post('/update-basic-details',[SalonProfileController::class, 'update_basic_details'])->name('update-basic-details');
+        Route::post('/update-address-details',[SalonProfileController::class, 'update_address_details'])->name('update-address-details');
         Route::post('/update-salon-banner',[SalonProfileController::class, 'update_salon_banner'])->name('update-salon-banner');
         Route::post('/update-salon-social-media',[SalonProfileController::class, 'update_salon_social_media'])->name('update-salon-social-media');
+        Route::post('/delete-salon-social-media',[SalonProfileController::class, 'delete_salon_social_media'])->name('delete-salon-social-media');
 
         // Salon Basic Routes
         Route::get('/logout',[SalonController::class, 'logout'])->name('logout');
         
         // POST Requests
-        Route::post('/update_password',[SalonProfileController::class, 'update_password'])->name('update_password');
-        Route::post('/profile/update',[SalonProfileController::class, 'update'])->name('submit_profile');
+        
     });
 });
 

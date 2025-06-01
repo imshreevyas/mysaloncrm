@@ -26,12 +26,11 @@ return new class extends Migration
             $table->string('contact_number');
             $table->string('business_email')->nullable();
             $table->integer('staff_count')->default(0);
-            $table->integer('established_year')->nullable();
             $table->string('website_url')->nullable();
-            $table->json('operating_hours')->nullable();
-            $table->json('operating_days')->nullable();
+            $table->json('operating_days')->nullable()->default('[]');
+            $table->string('opening_hours')->nullable()->default('9:30am');
+            $table->string('closing_hours')->nullable()->default('9:30pm');
             $table->json('social_media_links')->nullable();
-            $table->text('cancellation_policy')->nullable();
             $table->timestamps();
         });
     }

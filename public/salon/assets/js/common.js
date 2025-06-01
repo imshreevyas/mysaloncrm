@@ -96,14 +96,35 @@ function show_toast(type, message) {
     }).showToast();
 }
 
+function populate_city(){
+    const state_id = $('#choices-single-state').val();
+    if(state_id != undefined){
+        const cityChoices = window.choicesInstances['choices-single-city'];
 
-$(document).ready(function() {
-    function show_password_popup (){
-        $('#update_password').modal(SHOW_PASSWORD_POPUP);
+        var formData = new FormData();
+        formData.append('state_id',state_id);
+        axios.post(`${APP_URL}salon/get-cities`, formData).then(function(response) {
+            if (response.data.type == 'success') {
+                cityChoices.clearStore();            
+                cityChoices.setChoices(JSON.parse(response.data.cities));
+            }
+        }).catch(function(err) {
+            show_toast('error', err)
+        });
     }
-    show_password_popup()
-});
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+    const stateSelect = document.getElementById('choices-single-state');
+
+    if (stateSelect != undefined) {
+        populate_city();
+
+        $('#choices-single-state').on('change',function(){
+            populate_city();
+        });
+    }
+});
 
 $('#profile-foreground-img-file-input').on('change', function(){
     const file = this.files[0];
@@ -162,17 +183,19 @@ $('#add_new_social_media_link').on('click', function(){
     
     if(item_count > 5){
         show_toast('error', 'Oops! only 5 Links are allowed!');
+        return false;
     }
-    var html = `<div id="social-media-link-${item_count}" class="row pt-1"><div class="input-group">
-        <select class="form-control" name="" id="socail_media_links[${item_count}]['type']">
-            <option value="instagram"><i class="ri-instagram-fill"></i>Instagram</option>
-            <option value="facebook"><i class="ri-facebook-fill"></i>Facebook</option>
-            <option value="youtube"><i class="ri-youtube-fill"></i>Youtube</option>
-            <option value="tiktok"><i class="ri-tiktok-fill"></i>Tiktok</option>
-            <option value="other"><i class="ri-browser-fill"></i>Other</option>
+    var html = `<div id="social-media-link-${item_count}" class="mb-3 d-flex pt-1">
+    <div class="input-group">
+        <select class="form-control" name="social_media_links[${item_count}][type]">
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+            <option value="youtube">Youtube</option>
+            <option value="tiktok">Tiktok</option>
+            <option value="other">Other</option>
         </select>
-        <input type="text" class="form-control" name="socail_media_links[${item_count}]['type']" aria-label="Text input with dropdown button">
-        <button class="btn btn-danger" onclick="deleteLink('${item_count}')"><i class="ri-delete-bin-fill"></i></button>
+        <input type="text" class="form-control" name="social_media_links[${item_count}][link]" aria-label="Social Media Links">
+        <button class="btn btn-danger" type="button" onclick="deleteLink('${item_count}')"><i class="ri-delete-bin-fill"></i></button>
     </div></div>`; 
     $(this).val(item_count)
     $('#save_social_media_links').removeClass('d-none');
@@ -190,24 +213,34 @@ function deleteLink(id){
     $(`#social-media-link-${id}`).remove();
 }
 
-$('#save_social_media_links').on('click',function(){
+$('#social-media-edit-btn').on('click', function(){
+    $('#social_media_links_form').removeClass('d-none');
+    $('#social-media-action-btn-div').removeClass('d-none');
+
+    $('#social-media-div').addClass('d-none');
+    $('#social-media-edit-btn-div').addClass('d-none');
+});
+
+$('#save_social_media_links').on('click',function(e){
     e.preventDefault();
-    const uploadBannerForm = $('#social_media_links_form')[0]; // Get the native DOM form element
-    const formData = new FormData(uploadBannerForm);
-    axios.post(`${APP_URL}salon/update-salon-social-media`,formData, {headers: {
-        'Content-Type': 'multipart/form-data', 
-    }}).then(function(response) {
+    const social_media_links_form = $('#social_media_links_form')[0]; // Get the native DOM form element
+    const formData = new FormData(social_media_links_form);
+    axios.post(`${APP_URL}salon/update-salon-social-media`, formData).then(function(response) {
         // handle success
-        show_toast(response.data.message, response.data.type)
-        if (response.data.type == 'success') {
-            var default_banner = $(this).attr('data-default-banner');
-            $('.profile-wid-img').attr('src', default_banner);
-            $('.upload-cover-photo-btn').removeClass('d-none');
-            $('.update-cover-photo-btn').addClass('d-none');
-        } else {
-            return false;
+        show_toast(response.data.type, response.data.message)
+
+        if(response.data.type == 'success'){
+            $('#social_media_links_form').addClass('d-none');
+            $('#social-media-action-btn-div').addClass('d-none');
+
+            $('#social-media-div').removeClass('d-none');
+            $('#social-media-div').html(response.data.html);
+            $('#social-media-edit-btn-div').removeClass('d-none');
         }
+
     }).catch(function(err) {
         show_toast('error', err.response.data.message)
     });
 });
+
+

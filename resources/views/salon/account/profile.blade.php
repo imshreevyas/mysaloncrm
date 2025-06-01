@@ -7,7 +7,7 @@
 
         <div class="profile-foreground position-relative mx-n4 mt-n4">
             <div class="profile-wid-bg custom-blur">
-                <img src="{{ isset($salon_details->profile->salon_banner) ? asset($salon_details->profile->salon_banner) : asset('msg/default-profile-bg.png') }}" alt="" class="profile-wid-img" />
+                <img src="{{ check_isset_or_null($salon_details->profile, 'salon_banner', asset('msg/default-profile-bg.png'))  }}" alt="" class="profile-wid-img" />
             </div>
         </div>
         <div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
@@ -20,11 +20,11 @@
                 <!--end col-->
                 <div class="col">
                     <div class="p-2">
-                        <h3 class="text-white mb-1">{{ $salon_details->profile->salon_name ?: '#Salon Name' }}</h3>
-                        <p class="text-white text-opacity-75">{{ $salon_details->profile->salon_type ?: '#Salon Type' }}</p>
+                        <h3 class="text-white mb-1">{{ check_isset_or_null($salon_details->profile, 'salon_name', '#Salon Name') }}</h3>
+                        <p class="text-white text-opacity-75">{{ check_isset_or_null($salon_details->profile, 'salon_type' , '#Salon Type') }}</p>
                         <div class="hstack text-white gap-1">
-                            <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white text-opacity-75 fs-16 align-middle"></i> {{ $salon_details->profile['state'] ?: '#State' }}</div>
-                            <div><i class="ri-building-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>{{ $salon_details->profile['city'] ?: '#City' }}
+                            <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white text-opacity-75 fs-16 align-middle"></i> {{ check_isset_or_null($salon_details->profile->state_master, 'name', '#State') }}</div>
+                            <div><i class="ri-building-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>{{ check_isset_or_null($salon_details->profile->city_master, 'name' ,'#City') }}
                             </div>
                         </div>
                     </div>
@@ -34,13 +34,13 @@
                     <div class="row text text-white-50 text-center">
                         <div class="col-lg-6 col-4">
                             <div class="p-2">
-                                <h4 class="text-white mb-1">{{ $salon_details['total_sale'] ?: '0' }}</h4>
+                                <h4 class="text-white mb-1">{{ check_isset_or_null($salon_details, 'total_sale', '0') }}</h4>
                                 <p class="fs-14 mb-0 text-white">Sale</p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-4">
                             <div class="p-2">
-                                <h4 class="text-white mb-1">{{ $salon_details['total_staff'] ?: '0' }}</h4>
+                                <h4 class="text-white mb-1">{{ check_isset_or_null($salon_details->profile,'staff_count' ,'0') }}</h4>
                                 <p class="fs-14 mb-0 text-white">Staff</p>
                             </div>
                         </div>
@@ -91,8 +91,8 @@
                                         <div class="card-body">
                                             <h5 class="card-title mb-5">Complete Your Profile</h5>
                                             <div class="progress animated-progress custom-progress progress-label">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $salon_details->profile->completion_percentage ?? 0 }}%" aria-valuenow="{{ $salon_details->profile->completion_percentage ?? 0 }}" aria-valuemin="0" aria-valuemax="100">
-                                                    <div class="label">{{ $salon_details->profile->completion_percentage ?? 0 }}%</div>
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ check_isset_or_null($salon_details->profile , 'completion_percentage', 0) }}%" aria-valuenow="{{ check_isset_or_null($salon_details->profile , 'completion_percentage', 0) }}" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="label">{{ check_isset_or_null($salon_details->profile , 'completion_percentage', 0) }}%</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,19 +106,19 @@
                                                     <tbody>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Salon Name :</th>
-                                                            <td class="text-muted">{{ $salon_details->profile['salon_name'] ?? '#Salon Name' }}</td>
+                                                            <td class="text-muted">{{ check_isset_or_null($salon_details->profile, 'salon_name', '#Salon Name') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Contact Number :</th>
-                                                            <td class="text-muted">{{ $salon_details->profile['contact_number'] ?? '#Contact Number' }}</td>
+                                                            <td class="text-muted">{{ check_isset_or_null($salon_details->profile, 'contact_number', '#Contact Number') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Business Email :</th>
-                                                            <td class="text-muted">{{ $salon_details->profile['business_email'] ?? '#Business Email' }}</td>
+                                                            <td class="text-muted">{{ check_isset_or_null($salon_details->profile, 'business_email', '#Business Email') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Location :</th>
-                                                            <td class="text-muted">{{ $salon_details->profile['address'] ?? '#Address' }}
+                                                            <td class="text-muted">{{ check_isset_or_null($salon_details->profile, 'full_address', '#Address') }}
                                                             </td>
                                                         </tr>
                                                         <tr>

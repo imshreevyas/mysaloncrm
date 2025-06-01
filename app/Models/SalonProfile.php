@@ -11,23 +11,22 @@ class SalonProfile extends Model
     protected $fillable = [
         'salon_uid',
         'salon_name',
-        'category',
+        'salon_logo',
+        'salon_banner',
         'salon_type',
+        'contact_number',
+        'business_email',
+        'estabished_year',
         'full_address',
         'state',
         'city',
         'pincode',
-        'contact_number',
-        'business_email',
         'staff_count',
-        'estabished_year',
         'website_url',
-        'salon_logo',
-        'salon_banner',
-        'operating_hours',
         'operating_days',
+        'opening_hours',
+        'closing_hours',
         'social_media_links',
-        'cancellation_policy',
         'updated_at',
     ];
 
@@ -59,5 +58,15 @@ class SalonProfile extends Model
         // cancellation_policy and operating_days excluded
 
         return ($totalFields > 0) ? round(($filledFields / $totalFields) * 100) : 0;
+    }
+
+    public function state_master()
+    {
+        return $this->belongsTo(StateMaster::class, 'state', 'id');
+    }
+
+    public function city_master()
+    {
+        return $this->belongsTo(CityMaster::class, 'city', 'id');
     }
 }

@@ -66,60 +66,92 @@
                                     <h5 class="card-title mb-0">Social Media Links</h5>
                                 </div>
                             </div>
+                            @php 
+                                $links_count = -1;
+                            @endphp
+
+
                             @if (!empty($salon_details->profile->social_media_links))
                             @php
                                 $all_links = json_decode($salon_details->profile->social_media_links, true);
                             @endphp
-                                @foreach ($all_links as $index => $single_sc)
+                                <div class="row" id="social-media-div">
+                                    @foreach ($all_links as $index => $single_sc)
                                     <div class="mb-3 d-flex">
                                         <div class="avatar-xs d-block flex-shrink-0 me-3">
                                             <span class="avatar-title rounded-circle fs-16 bg-dark text-light">
                                                 <i class="ri-{{ $single_sc['type'] }}-fill"></i>
                                             </span>
                                         </div>
-                                        <input type="email" class="form-control" id="gitUsername" placeholder="Username"
-                                            value="{{ $single_sc['username'] }}">
+                                        <input type="text" disabled class="form-control" id="{{ $single_sc['type'] }}-link" placeholder="Your Link" value="{{ $single_sc['link'] }}">
                                     </div>
-                                @endforeach
-                                <form class="form-group" id="social_media_links_form">
+                                    @endforeach
+                                </div>
+                                <form class="form-group d-none" id="social_media_links_form">
                                     @csrf
-                                        {{-- Dynamic Add Form --}}
+                                    @foreach ($all_links as $index => $single_sc)
+                                    @php 
+                                        $links_count++;
+                                    @endphp
+                                        <div id="social-media-link-{{ $index }}" class="mb-3 d-flex">
+                                            <div class="input-group">
+                                                <select class="form-control" name="social_media_links[{{ $index }}][type]">
+                                                    <option value="instagram" {{ $single_sc['type'] == 'instagram' ? 'selected' : '' }}>Instagram</option>
+                                                    <option value="facebook" {{ $single_sc['type'] == 'facebook' ? 'selected' : '' }}>Facebook</option>
+                                                    <option value="youtube" {{ $single_sc['type'] == 'youtube' ? 'selected' : '' }}>Youtube</option>
+                                                    <option value="tiktok" {{ $single_sc['type'] == 'tiktok' ? 'selected' : '' }}>Tiktok</option>
+                                                    <option value="global" {{ $single_sc['type'] == 'other' ? 'selected' : '' }}>Other</option>
+                                                </select>
+                                                <input type="text" name="social_media_links[{{ $index }}][link]" class="form-control" id="{{ $single_sc['type'] }}-edit-link" placeholder="link"
+                                                    value="{{ $single_sc['link'] }}">
+                                                <button type="button" class="btn btn-danger" onclick="deleteLink({{ $index }})"><i class="ri-delete-bin-fill"></i></button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    
+                                    {{-- Dynamic Add Form --}}
                                 </form>
                             @endif
                         </div>
                         <div class="card-footer">
-                            <div class="flex-shrink-0">
-                                <button type="button" id="add_new_social_media_link" value="0" class="badge border-0 bg-light text-primary fs-16"><i class="ri-add-fill align-bottom me-1"></i> Add</button>
-                                <button type="button" id="save_social_media_links" class="badge bg-light text-success fs-16 border-0 d-none"><i class="ri-check-fill align-bottom me-1"></i> Save</button>
+                            <div class="flex-shrink-0 d-none" id="social-media-action-btn-div">
+                                <button type="button" id="add_new_social_media_link" value="{{ $links_count }}" class="badge border-0 bg-light text-primary fs-16"><i class="ri-add-fill align-bottom me-1"></i> Add</button>
+                                <button type="button" id="save_social_media_links" class="badge bg-light text-success fs-16 border-0 {{ $links_count > 0 ? '' : 'd-none' }}"><i class="ri-check-fill align-bottom me-1"></i> Save</button>
+                            </div>
+                            <div class="flex-shrink-0" id="social-media-edit-btn-div">
+                                <button type="button" id="social-media-edit-btn" value="{{ $links_count }}" class="badge border-0 bg-light text-primary fs-16"><i class="ri-pencil-fill align-bottom me-1"></i> Edit</button>
                             </div>
                         </div>
                     </div>
                     <!--end card-->
                 </div>
                 <!--end col-->
+                @php 
+                $show_active_tab = isset($tab) && !empty($tab) ? $tab : 'basicDetails';
+                @endphp
                 <div class="col-xxl-9">
                     <div class="card mt-xxl-n5">
                         <div class="card-header">
                             <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link text-body active" data-bs-toggle="tab" href="#personalDetails"
+                                    <a class="nav-link text-body {{ $show_active_tab == 'basicDetails' ? 'active' : '' }}" data-bs-toggle="tab" href="#basicDetails"
                                         role="tab">
                                         <i class="fas fa-home"></i>
-                                        Personal Details
+                                        Basic Details
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-body" data-bs-toggle="tab" href="#changePassword"
+                                    <a class="nav-link text-body {{ $show_active_tab == 'address' ? 'active' : '' }}" data-bs-toggle="tab" href="#address"
+                                        role="tab">
+                                        <i class="far fa-envelope"></i>
+                                        Address Details
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-body {{ $show_active_tab == 'changePassword' ? 'active' : '' }}" data-bs-toggle="tab" href="#changePassword"
                                         role="tab">
                                         <i class="far fa-user"></i>
                                         Change Password
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-body" data-bs-toggle="tab" href="#experience"
-                                        role="tab">
-                                        <i class="far fa-envelope"></i>
-                                        Experience
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -132,379 +164,23 @@
                         </div>
                         <div class="card-body p-4">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                    <form action="{{ route('salon.edit-profile') }}" method="POST">
-                                        @csrf
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="firstnameInput" class="form-label">Salon Name</label>
-                                                    <input type="text" class="form-control" id="firstnameInput"
-                                                        placeholder="Enter your firstname" value="{{ $salon_details->profile->salon_name }}">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="lastnameInput" class="form-label">Last
-                                                        Name</label>
-                                                    <input type="text" class="form-control" id="lastnameInput"
-                                                        placeholder="Enter your lastname" value="Adame">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="phonenumberInput" class="form-label">Phone
-                                                        Number</label>
-                                                    <input type="text" class="form-control" id="phonenumberInput"
-                                                        placeholder="Enter your phone number" value="+(1) 987 6543">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="emailInput" class="form-label">Email
-                                                        Address</label>
-                                                    <input type="email" class="form-control" id="emailInput"
-                                                        placeholder="Enter your email" value="daveadame@velzon.com">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label for="JoiningdatInput" class="form-label">Joining
-                                                        Date</label>
-                                                    <input type="text" class="form-control" data-provider="flatpickr"
-                                                        id="JoiningdatInput" data-date-format="d M, Y"
-                                                        data-deafult-date="24 Nov, 2021" placeholder="Select date" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label for="skillsInput" class="form-label">Skills</label>
-                                                    <select class="form-control" name="skillsInput" data-choices
-                                                        data-choices-text-unique-true multiple id="skillsInput">
-                                                        <option value="illustrator">Illustrator</option>
-                                                        <option value="photoshop">Photoshop</option>
-                                                        <option value="css">CSS</option>
-                                                        <option value="html">HTML</option>
-                                                        <option value="javascript" selected>Javascript</option>
-                                                        <option value="python">Python</option>
-                                                        <option value="php">PHP</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="designationInput" class="form-label">Designation</label>
-                                                    <input type="text" class="form-control" id="designationInput"
-                                                        placeholder="Designation" value="Lead Designer / Developer">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="websiteInput1" class="form-label">Website</label>
-                                                    <input type="text" class="form-control" id="websiteInput1"
-                                                        placeholder="www.example.com" value="www.velzon.com" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label for="cityInput" class="form-label">City</label>
-                                                    <input type="text" class="form-control" id="cityInput"
-                                                        placeholder="City" value="California" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label for="countryInput" class="form-label">Country</label>
-                                                    <input type="text" class="form-control" id="countryInput"
-                                                        placeholder="Country" value="United States" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label for="zipcodeInput" class="form-label">Zip
-                                                        Code</label>
-                                                    <input type="text" class="form-control" minlength="5"
-                                                        maxlength="6" id="zipcodeInput" placeholder="Enter zipcode"
-                                                        value="90011">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="mb-3 pb-2">
-                                                    <label for="exampleFormControlTextarea"
-                                                        class="form-label">Description</label>
-                                                    <textarea class="form-control" id="exampleFormControlTextarea" placeholder="Enter your description" rows="3">Hi I'm Anna Adame,It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</textarea>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="hstack gap-2 justify-content-end">
-                                                    <button type="submit" class="btn btn-primary">Updates</button>
-                                                    <button type="button" class="btn btn-soft-success">Cancel</button>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </form>
+                                <div class="tab-pane  {{ $show_active_tab == 'basicDetails' ? 'active' : '' }}" id="basicDetails" role="tabpanel">
+                                    @include('salon.components.profile-basic-details-form')
                                 </div>
                                 <!--end tab-pane-->
-                                <div class="tab-pane" id="changePassword" role="tabpanel">
-                                    <form action="javascript:void(0);">
-                                        <div class="row g-2">
-                                            <div class="col-lg-4">
-                                                <div>
-                                                    <label for="oldpasswordInput" class="form-label">Old
-                                                        Password*</label>
-                                                    <input type="password" class="form-control" id="oldpasswordInput"
-                                                        placeholder="Enter current password">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4">
-                                                <div>
-                                                    <label for="newpasswordInput" class="form-label">New
-                                                        Password*</label>
-                                                    <input type="password" class="form-control" id="newpasswordInput"
-                                                        placeholder="Enter new password">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4">
-                                                <div>
-                                                    <label for="confirmpasswordInput" class="form-label">Confirm
-                                                        Password*</label>
-                                                    <input type="password" class="form-control" id="confirmpasswordInput"
-                                                        placeholder="Confirm password">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <a href="javascript:void(0);"
-                                                        class="link-primary text-decoration-underline">Forgot
-                                                        Password ?</a>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="text-end">
-                                                    <button type="submit" class="btn btn-success">Change
-                                                        Password</button>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </form>
-                                    <div class="mt-4 mb-3 border-bottom pb-2">
-                                        <div class="float-end">
-                                            <a href="javascript:void(0);" class="link-primary">All Logout</a>
-                                        </div>
-                                        <h5 class="card-title">Login History</h5>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="flex-shrink-0 avatar-sm">
-                                            <div class="avatar-title bg-light text-primary rounded-3 fs-18">
-                                                <i class="ri-smartphone-line"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6>iPhone 12 Pro</h6>
-                                            <p class="text-muted mb-0">Los Angeles, United States - March 16 at
-                                                2:47PM</p>
-                                        </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="flex-shrink-0 avatar-sm">
-                                            <div class="avatar-title bg-light text-primary rounded-3 fs-18">
-                                                <i class="ri-tablet-line"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6>Apple iPad Pro</h6>
-                                            <p class="text-muted mb-0">Washington, United States - November 06
-                                                at 10:43AM</p>
-                                        </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="flex-shrink-0 avatar-sm">
-                                            <div class="avatar-title bg-light text-primary rounded-3 fs-18">
-                                                <i class="ri-smartphone-line"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6>Galaxy S21 Ultra 5G</h6>
-                                            <p class="text-muted mb-0">Conneticut, United States - June 12 at
-                                                3:24PM</p>
-                                        </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 avatar-sm">
-                                            <div class="avatar-title bg-light text-primary rounded-3 fs-18">
-                                                <i class="ri-macbook-line"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6>Dell Inspiron 14</h6>
-                                            <p class="text-muted mb-0">Phoenix, United States - July 26 at
-                                                8:10AM</p>
-                                        </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
-                                    </div>
+                                <div class="tab-pane  {{ $show_active_tab == 'address' ? 'active' : '' }}" id="address" role="tabpanel">
+                                    @include('salon.components.profile-address-form')
                                 </div>
+                                
                                 <!--end tab-pane-->
-                                <div class="tab-pane" id="experience" role="tabpanel">
-                                    <form>
-                                        <div id="newlink">
-                                            <div id="1">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="mb-3">
-                                                            <label for="jobTitle" class="form-label">Job
-                                                                Title</label>
-                                                            <input type="text" class="form-control" id="jobTitle"
-                                                                placeholder="Job title" value="Lead Designer / Developer">
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-6">
-                                                        <div class="mb-3">
-                                                            <label for="companyName" class="form-label">Company
-                                                                Name</label>
-                                                            <input type="text" class="form-control" id="companyName"
-                                                                placeholder="Company name" value="Themesbrand">
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-6">
-                                                        <div class="mb-3">
-                                                            <label for="experienceYear" class="form-label">Experience
-                                                                Years</label>
-                                                            <div class="row">
-                                                                <div class="col-lg-5">
-                                                                    <select class="form-control" data-choices
-                                                                        data-choices-search-false name="experienceYear"
-                                                                        id="experienceYear">
-                                                                        <option value="">Select years</option>
-                                                                        <option value="Choice 1">2001</option>
-                                                                        <option value="Choice 2">2002</option>
-                                                                        <option value="Choice 3">2003</option>
-                                                                        <option value="Choice 4">2004</option>
-                                                                        <option value="Choice 5">2005</option>
-                                                                        <option value="Choice 6">2006</option>
-                                                                        <option value="Choice 7">2007</option>
-                                                                        <option value="Choice 8">2008</option>
-                                                                        <option value="Choice 9">2009</option>
-                                                                        <option value="Choice 10">2010</option>
-                                                                        <option value="Choice 11">2011</option>
-                                                                        <option value="Choice 12">2012</option>
-                                                                        <option value="Choice 13">2013</option>
-                                                                        <option value="Choice 14">2014</option>
-                                                                        <option value="Choice 15">2015</option>
-                                                                        <option value="Choice 16">2016</option>
-                                                                        <option value="Choice 17" selected>2017
-                                                                        </option>
-                                                                        <option value="Choice 18">2018</option>
-                                                                        <option value="Choice 19">2019</option>
-                                                                        <option value="Choice 20">2020</option>
-                                                                        <option value="Choice 21">2021</option>
-                                                                        <option value="Choice 22">2022</option>
-                                                                    </select>
-                                                                </div>
-                                                                <!--end col-->
-                                                                <div class="col-auto align-self-center">
-                                                                    to
-                                                                </div>
-                                                                <!--end col-->
-                                                                <div class="col-lg-5">
-                                                                    <select class="form-control" data-choices
-                                                                        data-choices-search-false
-                                                                        name="choices-single-default2">
-                                                                        <option value="">Select years</option>
-                                                                        <option value="Choice 1">2001</option>
-                                                                        <option value="Choice 2">2002</option>
-                                                                        <option value="Choice 3">2003</option>
-                                                                        <option value="Choice 4">2004</option>
-                                                                        <option value="Choice 5">2005</option>
-                                                                        <option value="Choice 6">2006</option>
-                                                                        <option value="Choice 7">2007</option>
-                                                                        <option value="Choice 8">2008</option>
-                                                                        <option value="Choice 9">2009</option>
-                                                                        <option value="Choice 10">2010</option>
-                                                                        <option value="Choice 11">2011</option>
-                                                                        <option value="Choice 12">2012</option>
-                                                                        <option value="Choice 13">2013</option>
-                                                                        <option value="Choice 14">2014</option>
-                                                                        <option value="Choice 15">2015</option>
-                                                                        <option value="Choice 16">2016</option>
-                                                                        <option value="Choice 17">2017</option>
-                                                                        <option value="Choice 18">2018</option>
-                                                                        <option value="Choice 19">2019</option>
-                                                                        <option value="Choice 20" selected>2020
-                                                                        </option>
-                                                                        <option value="Choice 21">2021</option>
-                                                                        <option value="Choice 22">2022</option>
-                                                                    </select>
-                                                                </div>
-                                                                <!--end col-->
-                                                            </div>
-                                                            <!--end row-->
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-12">
-                                                        <div class="mb-3">
-                                                            <label for="jobDescription" class="form-label">Job
-                                                                Description</label>
-                                                            <textarea class="form-control" id="jobDescription" rows="3" placeholder="Enter description">You always want to make sure that your fonts work well together and try to limit the number of fonts you use to three or less. Experiment and play around with the fonts that you already have in the software you're working with reputable font websites. </textarea>
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <a class="btn btn-success"
-                                                            href="javascript:deleteEl(1)">Delete</a>
-                                                    </div>
-                                                </div>
-                                                <!--end row-->
-                                            </div>
-                                        </div>
-                                        <div id="newForm" style="display: none;">
+                                <div class="tab-pane  {{ $show_active_tab == 'changePassword' ? 'active' : '' }}" id="changePassword" role="tabpanel">
+                                    @include('salon.components.profile-change-password-form')
 
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2">
-                                                <button type="submit" class="btn btn-success">Update</button>
-                                                <a href="javascript:new_link()" class="btn btn-primary">Add
-                                                    New</a>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                    </form>
+                                    @include('salon.components.profile-login-history-list')
                                 </div>
+
                                 <!--end tab-pane-->
-                                <div class="tab-pane" id="privacy" role="tabpanel">
+                                <div class="tab-pane  {{ $show_active_tab == 'privacy' ? 'active' : '' }}" id="privacy" role="tabpanel">
                                     <div class="mb-4 pb-2">
                                         <h5 class="card-title text-decoration-underline mb-3">Security:</h5>
                                         <div class="d-flex flex-column flex-sm-row mb-4 mb-sm-0">

@@ -8,7 +8,7 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="flex-grow-1">
-                        <h4 class="fs-16 mb-1">Hello, {{ $salon_details->profile->salon_name ?: '#Salon Name' }}!</h4>
+                        <h4 class="fs-16 mb-1">Hello, {{ check_isset_or_null($salon_details->profile, 'salon_name', '#Salon Name') }}!</h4>
                         <p class="text-muted mb-0">Here's what's happening with your Salon today.</p>
                     </div>
                 </div>
