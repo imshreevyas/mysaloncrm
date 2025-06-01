@@ -97,20 +97,20 @@
         <div class="col-lg-6">
             <div class="mb-3">
                 <label for="skillsInput" class="form-label">Opening Time</label>
-                <input type="time" class="form-control" id="exampleInputtime" name="opening_hour"
+                <input type="time" class="form-control" id="opening_hour" name="opening_hour"
                     data-provider="timepickr"
-                    data-default-time="{{ old('opening_hour', date('H:m A', strtotime($salon_details->profile->opening_hours))) }}"
-                    value="{{ date('H:m A', strtotime($salon_details->profile->opening_hours)) }}">
+                    data-default-time="{{ old('opening_hour', date('H:i', strtotime($salon_details->profile->opening_hour))) }}"
+                    value="{{ old('opening_hour', date('H:i', strtotime($salon_details->profile->opening_hour))) }}">
             </div>
         </div>
 
         <div class="col-lg-6">
             <div class="mb-3">
                 <label for="skillsInput" class="form-label">Closing Time</label>
-                <input type="time" class="form-control" id="exampleInputtime" name="closing_hour"
+                <input type="time" class="form-control" id="closing_hour" name="closing_hour"
                     data-provider="timepickr"
-                    data-default-time="{{ old('closing_hour', date('H:m A', strtotime($salon_details->profile->closing_hours))) }}"
-                    value="{{ date('H:m A', strtotime($salon_details->profile->closing_hours)) }}">
+                    data-default-time="{{ old('closing_hour', date('H:i', strtotime($salon_details->profile->closing_hour))) }}"
+                    value="{{ old('closing_hour', date('H:i', strtotime($salon_details->profile->closing_hour))) }}">
             </div>
         </div>
         <!--end col-->

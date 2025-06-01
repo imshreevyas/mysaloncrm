@@ -126,6 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
+
 $('#profile-foreground-img-file-input').on('change', function(){
     const file = this.files[0];
         if (file) {
@@ -164,12 +166,12 @@ $('#upload-banner').on('click',function(e){
         'Content-Type': 'multipart/form-data', 
     }}).then(function(response) {
         // handle success
-        show_toast(response.data.message, response.data.type)
+        show_toast(response.data.type, response.data.message)
         if (response.data.type == 'success') {
-            var default_banner = $(this).attr('data-default-banner');
-            $('.profile-wid-img').attr('src', default_banner);
+            $('.profile-wid-img').attr('src', response.data.new_banner_url);
             $('.upload-cover-photo-btn').removeClass('d-none');
             $('.update-cover-photo-btn').addClass('d-none');
+            return true;
         } else {
             return false;
         }
@@ -177,6 +179,52 @@ $('#upload-banner').on('click',function(e){
         show_toast('error', err.response.data.message)
     });
 });
+
+
+$('#profile-img-file-input').on('change', function(){
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Show preview in the dedicated preview image
+            $('.user-profile-image').attr('src', e.target.result);
+            $('.upload-logo-photo-btn').addClass('d-none');
+            $('.update-logo-photo-btn').removeClass('d-none');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+$('#cancel-logo-upload').on('click',function(){
+    var default_logo = $(this).attr('data-default-logo');
+    $('.user-profile-image').attr('src', default_logo);
+    $('.upload-logo-photo-btn').removeClass('d-none');
+    $('.update-logo-photo-btn').addClass('d-none');
+});
+
+$('#upload-logo').on('click',function(e){
+    e.preventDefault();
+    const uploadBannerForm = $('#upload-logo-form')[0]; // Get the native DOM form element
+    const formData = new FormData(uploadBannerForm);
+    axios.post(`${APP_URL}salon/update-salon-logo`,formData, {headers: {
+        'Content-Type': 'multipart/form-data', 
+    }}).then(function(response) {
+        // handle success
+        show_toast(response.data.type, response.data.message)
+        if (response.data.type == 'success') {
+            $('.profile-wid-img').attr('src', response.data.new_banner_url);
+            $('.upload-cover-photo-btn').removeClass('d-none');
+            $('.update-cover-photo-btn').addClass('d-none');
+            return true;
+        } else {
+            return false;
+        }
+    }).catch(function(err) {
+        show_toast('error', err.response.data.message)
+    });
+});
+
+
 
 $('#add_new_social_media_link').on('click', function(){
     var item_count = parseInt($(this).val()) + 1;
@@ -206,7 +254,7 @@ function deleteLink(id){
     $(this).removeClass('ri-delete-bin-fill');
     $(this).addClass('spinner-grow spinner-grow-xs');
     var item_count = parseInt($('#add_new_social_media_link').val()) - 1;
-    if(item_count == 0){
+    if(item_count == -1){
         $('#save_social_media_links').addClass('d-none');
     }
     $('#add_new_social_media_link').val(item_count);

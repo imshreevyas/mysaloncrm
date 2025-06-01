@@ -12,6 +12,8 @@ use App\Models\StateMaster;
 use App\Models\CityMaster;
 use App\Models\PincodeMaster;
 use App\Http\Middleware\SalonAuth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SalonProfileController extends Controller
 {
@@ -87,12 +89,78 @@ class SalonProfileController extends Controller
 
     public function update_salon_banner(Request $request){
         $validatedData = $request->validate([
-            'banner' => 'required|file|mimes:jpeg,png,jpg,webp,PNG,JPG|max:20480|dimensions:max_width=1370,max_height=770'
+            'salon_banner' => 'required|file|mimes:jpeg,png,jpg,webp,PNG,JPG|max:20480'
         ]);
+
+        if ($request->hasFile('salon_banner')) {
+            $asset = $request->file('salon_banner'); // Get the single file
+            $filename = Str::random(20).'-'.time() . '.' . $asset->getClientOriginalExtension();
+            $directory = $this->salon_uid;
+
+            // Ensure the directory exists and set permissions
+            if (!Storage::disk('public')->exists($directory)) {
+                Storage::disk('public')->makeDirectory($directory);
+                chmod(storage_path('app/public/' . $directory), 0775);
+            }
+
+            $path = $asset->storeAs($directory, $filename, 'public');
+            $assetPath = Storage::url($path);
+            $banner_url = $assetPath;
+            $validatedData['salon_banner'] = $banner_url;
+        }
+
+        
+        //delete Previous Image if in folder
+        if($this->data['salon_details']->profile->salon_banner && !empty($this->data['salon_details']->profile->salon_banner)) {
+            $oldImagePath = str_replace('/storage/', '', $this->data['salon_details']->profile->salon_banner);
+            if (Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+        }
+        $update_banner = SalonProfile::updateOrCreate(['salon_uid' => $this->salon_uid],$validatedData);
+        if($update_banner){
+            return response()->json(['type' => 'success', 'message' => 'Banner Updated Successfully!', 'new_banner_url' => asset($banner_url)]);
+        }else{
+            return response()->json(['type' => 'error', 'message' => 'Oops, Something went wrong!']);
+        }
     }
 
     public function update_salon_logo(Request $request){
+        $validatedData = $request->validate([
+            'salon_logo' => 'required|file|mimes:jpeg,png,jpg,webp,PNG,JPG|max:20480|dimensions:max_width=500,max_height=500'
+        ]);
 
+        if ($request->hasFile('salon_logo')) {
+            $asset = $request->file('salon_logo'); // Get the single file
+            $filename = Str::random(20).'-'.time() . '.' . $asset->getClientOriginalExtension();
+            $directory = $this->salon_uid;
+
+            // Ensure the directory exists and set permissions
+            if (!Storage::disk('public')->exists($directory)) {
+                Storage::disk('public')->makeDirectory($directory);
+                chmod(storage_path('app/public/' . $directory), 0775);
+            }
+
+            $path = $asset->storeAs($directory, $filename, 'public');
+            $assetPath = Storage::url($path);
+            $logo_url = $assetPath;
+            $validatedData['salon_logo'] = $logo_url;
+        }
+
+        
+        //delete Previous Image if in folder
+        if($this->data['salon_details']->profile->salon_logo && !empty($this->data['salon_details']->profile->salon_logo)) {
+            $oldImagePath = str_replace('/storage/', '', $this->data['salon_details']->profile->salon_logo);
+            if (Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+        }
+        $update_logo = SalonProfile::updateOrCreate(['salon_uid' => $this->salon_uid],$validatedData);
+        if($update_logo){
+            return response()->json(['type' => 'success', 'message' => 'Logo Updated Successfully!', 'new_logo_url' => asset($logo_url)]);
+        }else{
+            return response()->json(['type' => 'error', 'message' => 'Oops, Something went wrong!']);
+        }
     }
 
     public function update_salon_social_media(Request $request){
@@ -180,13 +248,12 @@ class SalonProfileController extends Controller
             'confirm_password' => 'required|same:password'
         ]);
         
-        $salon = Auth::guard('salon')->user();
         $password = Hash::make($validatedData['password']);
-        $updatePassword = Salon::where('salon_uid', $salon->salon_uid)->update(['password' => $password]);
+        $updatePassword = Salon::where('salon_uid', $this->salon_uid)->update(['password' => $password]);
         if($updatePassword){
-            return redirect()->back()->with('success', errorMessage('PASSWORD_UPDATED_SUCCESS'));
+            return redirect()->route('salon.edit-profile')->with('success', errorMessage('PASSWORD_UPDATED_SUCCESS'))->with('active_tab', 'changePassword');
         }else{
-            return redirect()->back()->withErrors(errorMessage('PASSWORD_UPDATED_FAILURE'));
+            return redirect()->route('salon.edit-profile')->withErrors([ 'error' => 'Something went wrong: ' . $e->getMessage(),])->with('active_tab', 'changePassword');
         }
 
     }

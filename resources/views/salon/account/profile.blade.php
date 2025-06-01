@@ -4,7 +4,19 @@
 
 <div class="page-content">
     <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <div class="page-title-left">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{{ route('salon.dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Profile</li>
+                        </ol>
+                    </div>
 
+                </div>
+            </div>
+        </div>
         <div class="profile-foreground position-relative mx-n4 mt-n4">
             <div class="profile-wid-bg custom-blur">
                 <img src="{{ check_isset_or_null($salon_details->profile, 'salon_banner', asset('msg/default-profile-bg.png'))  }}" alt="" class="profile-wid-img" />

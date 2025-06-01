@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('salon_name')->nullable();
             $table->string('salon_logo')->nullable();
             $table->string('salon_banner')->nullable();
-            $table->longText('about_us')->nullable();
             $table->string('salon_type')->default('unisex')->comment('unisex,male,female');
             $table->text('full_address')->nullable();
             $table->string('state')->nullable();
@@ -28,8 +27,8 @@ return new class extends Migration
             $table->integer('staff_count')->default(0);
             $table->string('website_url')->nullable();
             $table->json('operating_days')->nullable()->default('[]');
-            $table->string('opening_hours')->nullable()->default('9:30am');
-            $table->string('closing_hours')->nullable()->default('9:30pm');
+            $table->string('opening_hour')->nullable()->default('9:00');
+            $table->string('closing_hour')->nullable()->default('21:00');
             $table->json('social_media_links')->nullable();
             $table->timestamps();
         });

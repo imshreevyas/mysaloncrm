@@ -16,7 +16,6 @@ class SalonProfile extends Model
         'salon_type',
         'contact_number',
         'business_email',
-        'estabished_year',
         'full_address',
         'state',
         'city',
@@ -24,8 +23,8 @@ class SalonProfile extends Model
         'staff_count',
         'website_url',
         'operating_days',
-        'opening_hours',
-        'closing_hours',
+        'opening_hour',
+        'closing_hour',
         'social_media_links',
         'updated_at',
     ];
@@ -37,23 +36,24 @@ class SalonProfile extends Model
 
     public function getCompletionPercentageAttribute()
     {
-        $totalFields = 14; // Total number of fields to consider
+        $totalFields = 16; // Total number of fields to consider
         $filledFields = 0;
 
-        if ($this->salon_uid) $filledFields++;
         if ($this->salon_name) $filledFields++;
         if ($this->salon_logo) $filledFields++;
-        if ($this->salon_type !== null) $filledFields++;
+        if ($this->salon_banner) $filledFields++;
+        if ($this->salon_type) $filledFields++;
         if ($this->full_address) $filledFields++;
         if ($this->state) $filledFields++;
         if ($this->city) $filledFields++;
         if ($this->pincode) $filledFields++;
         if ($this->contact_number) $filledFields++;
         if ($this->business_email) $filledFields++;
-        if ($this->staff_count !== null) $filledFields++;
-        if ($this->established_year) $filledFields++;
+        if ($this->staff_count !== 0) $filledFields++;
         if ($this->website_url) $filledFields++;
-        if ($this->operating_hours) $filledFields++;
+        if ($this->operating_days) $filledFields++;
+        if ($this->opening_hour) $filledFields++;
+        if ($this->closing_hour) $filledFields++;
         if ($this->social_media_links) $filledFields++;
         // cancellation_policy and operating_days excluded
 
